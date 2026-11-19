@@ -71,6 +71,6 @@ test('approver cannot open the order ticket', async ({ browser }) => {
 
 test('no session redirects to login', async ({ page }) => {
   // TODO: /orders -> /login?next=%2Forders
-  const response = await page.goto('/orders');
+  await page.goto('/orders');
   await expect(page).toHaveURL('/login?next=%2Forders');
 });

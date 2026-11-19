@@ -1,10 +1,7 @@
-import { chromium, request, expect } from '@playwright/test';
+import { chromium, expect } from '@playwright/test';
 import { env } from '../../../helpers/env';
 
 const BASE_URL = process.env.BASE_URL ?? 'http://localhost:3300';
-const sleep = (ms: number): Promise<void> => {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-};
 
 async function main() {
   const browser = await chromium.launch({ headless: false });

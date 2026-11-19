@@ -1,4 +1,4 @@
-import { chromium, request, expect } from '@playwright/test';
+import { request, expect } from '@playwright/test';
 import { env } from '../../../helpers/env';
 import type { Order } from '../../../types/order';
 

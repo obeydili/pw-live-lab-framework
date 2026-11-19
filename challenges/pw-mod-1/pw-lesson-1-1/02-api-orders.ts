@@ -1,7 +1,7 @@
 import { request, expect } from '@playwright/test';
 import type { APIResponse } from '@playwright/test';
 import { readJson } from '../../../helpers/readJson';
-import type { LoginResponse, CreateOrderRequest, Order, ResetResponse } from '../../../types/order';
+import type { LoginResponse, CreateOrderRequest, Order } from '../../../types/order';
 import { env } from '../../../helpers/env';
 
 const BASE_URL = process.env.BASE_URL ?? 'http://localhost:3300';

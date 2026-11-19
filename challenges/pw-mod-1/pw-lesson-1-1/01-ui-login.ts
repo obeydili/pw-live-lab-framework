@@ -1,4 +1,4 @@
-import { chromium, request, expect } from '@playwright/test';
+import { chromium, expect } from '@playwright/test';
 import { env } from '../../../helpers/env';
 
 const BASE_URL = process.env.BASE_URL ?? 'http://localhost:3300';
@@ -27,6 +27,6 @@ async function main() {
   }
 }
 
-main().catch((err) => {
+main().catch(() => {
   process.exit(1);
 });
