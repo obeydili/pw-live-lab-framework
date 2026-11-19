@@ -39,13 +39,13 @@ async function main() {
     });
 
     const response = await responsePromise;
-    await page.waitForTimeout(500);
-    expect(requests).toHaveLength(1);
-    console.log(requests);
-    const jsonResponse = await response.json();
     await expect(response.status()).toBe(200)
     const totalOrders = Number(response.headers()['x-total-count']);
+    // Web-first wait instead of a fixed sleep: once the list shows the ACME result, typing and the
+    // debounce are over, so any extra search request would already have been sent.
     await expect(page.getByText(`Showing 1–${totalOrders} of ${totalOrders} orders`)).toBeVisible();
+    expect(requests).toHaveLength(1);
+    console.log(requests);
     await expect(page).toHaveURL('/orders?q=ACME');
     await page.getByRole('button', { name: 'Clear filters' }).click();
     await expect(page.getByRole('row')).toHaveCount(11);
