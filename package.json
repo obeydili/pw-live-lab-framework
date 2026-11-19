@@ -1,7 +1,7 @@
 {
   "name": "pw-live-lab-framework",
   "version": "1.0.0",
-  "description": "",
+  "description": "Playwright + TypeScript test framework for Practice-App-v2: fixtures, page objects and a typed API client covering UI, API and hybrid flows.",
   "scripts": {
     "app": "npm --prefix practice-app-v2 start",
     "app:install": "npm --prefix practice-app-v2 ci",
@@ -13,14 +13,13 @@
     "report": "playwright show-report",
     "typecheck": "tsc --noEmit"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "type": "module",
   "devDependencies": {
     "@playwright/test": "^1.65.0",
     "@types/node": "^26.6.6",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2"
-  }
+  },
+  "private": true
 }
