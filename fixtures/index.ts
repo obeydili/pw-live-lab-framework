@@ -3,6 +3,7 @@ import { ApiClient } from '../helpers/api-client';
 import { env } from '../helpers/env';
 import { LoginPage } from '../pages/login.page';
 import { OrdersPage } from '../pages/orders.page';
+import { ApprovalsPage } from '../pages/approvals.page';
 
 type MyFixtures = {
   apiClient: ApiClient;
@@ -12,6 +13,7 @@ type MyFixtures = {
   loginPage: LoginPage;
   ordersPage: OrdersPage;
   trader2OrdersPage: OrdersPage;
+  approvalsPage: ApprovalsPage;
   trader2Page: Page;
   approverPage: Page;
 };
@@ -39,6 +41,9 @@ export const test = base.extend<MyFixtures>({
   ordersPage: async ({ page }, use) => {
     const ordersPage = new OrdersPage(page);
     await use(ordersPage);
+  },
+  approvalsPage: async ({ page }, use) => {
+    await use(new ApprovalsPage(page));
   },
   trader2OrdersPage: async ({ trader2Page }, use) => {
     await use(new OrdersPage(trader2Page));

@@ -2,28 +2,37 @@ import { APIRequestContext, APIResponse } from '@playwright/test';
 import { readJson } from './readJson';
 import type { LoginResponse, UserInfo, CreateOrderRequest, Order } from '../types/order';
 
+/** A non-2xx answer from the API, with the status and parsed body for assertions. */
+export class ApiError extends Error {
+  constructor(
+    message: string,
+    readonly status: number,
+    readonly body: unknown,
+  ) {
+    super(message);
+    this.name = 'ApiError';
+  }
+}
+
+async function ensureOk(res: APIResponse, action: string): Promise<void> {
+  if (res.ok()) return;
+  const body: unknown = await res.json().catch(() => null);
+  throw new ApiError(`Failed to ${action}: ${res.status()} ${res.statusText()}`, res.status(), body);
+}
+
 export class ApiClient {
   private token: string | null = null;
 
   constructor(private readonly request: APIRequestContext) {}
 
   async login(username: string, password: string): Promise<void> {
-    // 1. POST to /api/auth/login
-    // 2. Use readJson to get the token
-    // 3. Set this.token = data.token;
-
     const loginResponse: APIResponse = await this.request.post('/api/auth/login', {
       data: {
         username: username,
         password: password,
       },
     });
-
-    if (!loginResponse.ok()) {
-      throw new Error(
-        `Failed to login: ${loginResponse.status()} ${loginResponse.statusText()}`,
-      );
-    }
+    await ensureOk(loginResponse, 'login');
 
     const data = await readJson<LoginResponse>(loginResponse);
     this.token = data.token;
@@ -46,9 +55,7 @@ export class ApiClient {
     const res = await this.request.get('/api/me', {
       headers: this.getHeaders(),
     });
-    if (!res.ok()) {
-      throw new Error(`Failed to get order: ${res.status()} ${res.statusText()}`);
-    }
+    await ensureOk(res, 'get the current user');
     return await readJson<UserInfo>(res);
   }
 
@@ -57,9 +64,7 @@ export class ApiClient {
       headers: this.getHeaders(),
       data: order,
     });
-    if (!res.ok()) {
-      throw new Error(`Failed to create order: ${res.status()} ${res.statusText()}`);
-    }
+    await ensureOk(res, 'create order');
     return await readJson<Order>(res);
   }
 
@@ -67,11 +72,24 @@ export class ApiClient {
     const res = await this.request.get(`/api/orders/${id}`, {
       headers: this.getHeaders(),
     });
+    await ensureOk(res, 'get order');
+    return await readJson<Order>(res);
+  }
 
-    if (!res.ok()) {
-      throw new Error(`Failed to get order: ${res.status()} ${res.statusText()}`);
-    }
+  async approveOrder(id: string): Promise<Order> {
+    const res = await this.request.post(`/api/orders/${id}/approve`, {
+      headers: this.getHeaders(),
+    });
+    await ensureOk(res, 'approve order');
+    return await readJson<Order>(res);
+  }
 
+  async rejectOrder(id: string, reason?: string): Promise<Order> {
+    const res = await this.request.post(`/api/orders/${id}/reject`, {
+      headers: this.getHeaders(),
+      data: reason === undefined ? {} : { reason },
+    });
+    await ensureOk(res, 'reject order');
     return await readJson<Order>(res);
   }
 }
