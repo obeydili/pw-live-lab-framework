@@ -5,32 +5,27 @@ try {
 import { defineConfig, devices } from '@playwright/test';
 import { env } from './helpers/env';
 
+const appPort = new URL(env.BASE_URL).port || '3300';
+
 export default defineConfig({
   testDir: './tests',
   timeout: 30_000,
   expect: { timeout: 5_000 },
-  /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
-  /* Retry on CI only */
   retries: process.env.CI ? 2 : 0,
-  /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: process.env.CI
     ? [['github'], ['list'], ['html', { open: 'never' }]]
     : [['list'], ['html', { open: 'never' }]],
-  /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
-    /* Base URL to use in actions like `await page.goto('')`. */
     baseURL: env.BASE_URL,
-
-    /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
   },
 
-  /* Configure projects for major browsers */
   projects: [
+    /* Signs in each account over the API and saves its session to playwright/.auth/. */
     { name: 'setup', testMatch: /.*\.setup\.ts/ },
     {
       name: 'chromium',
@@ -40,10 +35,12 @@ export default defineConfig({
     },
   ],
 
-  /* Run your local dev server before starting the tests */
-  // webServer: {
-  //   command: 'npm run start',
-  //   url: 'http://localhost:3300',
-  //   reuseExistingServer: !process.env.CI,
-  // },
+  /* Starts Practice-App-v2 on the BASE_URL port, or reuses one that is already running (locally). */
+  webServer: {
+    command: 'npm --prefix practice-app-v2 start',
+    url: `${env.BASE_URL}/api/health`,
+    env: { PORT: appPort },
+    reuseExistingServer: !process.env.CI,
+    timeout: 30_000,
+  },
 });

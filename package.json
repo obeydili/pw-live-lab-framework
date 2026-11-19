@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
+    "app": "npm --prefix practice-app-v2 start",
+    "app:install": "npm --prefix practice-app-v2 ci",
     "challenge": "tsx",
     "test": "playwright test",
     "test:headed": "playwright test --headed",
