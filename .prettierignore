@@ -1,0 +1,6 @@
+node_modules/
+practice-app-v2/
+playwright-report/
+test-results/
+playwright/
+package-lock.json

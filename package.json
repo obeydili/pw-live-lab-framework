@@ -11,13 +11,17 @@
     "test-alone": "playwright test --workers=1",
     "ui": "playwright test --ui",
     "report": "playwright show-report",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "lint": "oxlint --deny-warnings helpers fixtures pages tests types challenges playwright.config.ts && prettier --check \"**/*.{ts,js,json}\"",
+    "format": "prettier --write \"**/*.{ts,js,json}\""
   },
   "license": "MIT",
   "type": "module",
   "devDependencies": {
     "@playwright/test": "^1.65.0",
     "@types/node": "^26.6.6",
+    "oxlint": "^1.91.0",
+    "prettier": "^3.9.10",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2"
   },
