@@ -1,0 +1,58 @@
+name: Playwright Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      BASE_URL: http://localhost:3300
+      TRADER1_USERNAME: trader1
+      TRADER2_USERNAME: trader2
+      APPROVER1_USERNAME: approver1
+      TRADER1_PASSWORD: ${{ secrets.TRADER1_PASSWORD }}
+      TRADER2_PASSWORD: ${{ secrets.TRADER2_PASSWORD }}
+      APPROVER1_PASSWORD: ${{ secrets.APPROVER1_PASSWORD }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            practice-app-v2/package-lock.json
+
+      - name: Install dependencies
+        run: |
+          npm ci
+          npm ci --prefix practice-app-v2
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Practice-App-v2 self-tests
+        run: npm test --prefix practice-app-v2
+
+      # playwright.config.ts starts Practice-App-v2 through webServer and waits for /api/health.
+      - name: Run Playwright tests
+        run: npx playwright test
+
+      - name: Upload HTML report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 14
