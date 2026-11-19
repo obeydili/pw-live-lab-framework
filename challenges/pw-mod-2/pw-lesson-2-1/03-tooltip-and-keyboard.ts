@@ -50,10 +50,14 @@ async function main() {
     await page.keyboard.type('BLUE');
     await expect(page).toHaveURL('/orders?q=BLUE');
     const waitResponse = page.waitForResponse(
-      (r) => r.url().includes('/api/orders') && !r.url().includes('q=') && r.request().method() === 'GET');
+      (r) =>
+        r.url().includes('/api/orders') &&
+        !r.url().includes('q=') &&
+        r.request().method() === 'GET',
+    );
     await page.keyboard.press('Escape');
     const response = await waitResponse;
-    await expect(response.ok()).toBeTruthy();;
+    await expect(response.ok()).toBeTruthy();
     await page.locator('body').click();
     await page.keyboard.press('Alt+N');
     await expect(page).toHaveURL('/orders/new');

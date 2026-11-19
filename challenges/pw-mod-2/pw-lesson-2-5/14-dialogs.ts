@@ -76,9 +76,13 @@ async function main() {
       }
     });
     await approverPage.getByRole('button', { name: 'Reject with reason…' }).click();
-    expect(dialogMessages).toEqual(['prompt', 'Reason for rejection:', 'alert', 'A rejection reason is required.']);
+    expect(dialogMessages).toEqual([
+      'prompt',
+      'Reason for rejection:',
+      'alert',
+      'A rejection reason is required.',
+    ]);
     approverPage.removeAllListeners('dialog');
-      
 
     let dialogMessage: string | undefined;
     approverPage.once('dialog', async (dialog) => {

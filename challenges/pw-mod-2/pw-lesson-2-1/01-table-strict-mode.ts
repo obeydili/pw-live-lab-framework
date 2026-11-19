@@ -55,7 +55,6 @@ async function main() {
     expect(caughtError).toBeInstanceOf(Error);
     expect((caughtError as Error).message).toContain('strict mode violation');
 
-
     await expect(rows.first()).toContainText(ordersBody[0].id);
     await expect(rows.last()).toContainText(ordersBody[ordersBody.length - 1].id);
 

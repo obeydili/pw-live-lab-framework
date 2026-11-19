@@ -135,7 +135,7 @@ async function main() {
       array.push(pageOfOrders);
       currentPageNumber++;
     }
-    
+
     const ids: string[] = [];
     for (let number = 0; number < array.length; number++) {
       for (let number2 = 0; number2 < array[number].length; number2++) {
@@ -178,11 +178,11 @@ async function main() {
         Authorization: `Bearer ${token}`,
       },
       params: {
-        pageSize: 0, 
-        page: 'abc', 
-        sort: 'price', 
-        side: 'Hold', 
-        symbol: 'XYZ'
+        pageSize: 0,
+        page: 'abc',
+        sort: 'price',
+        side: 'Hold',
+        symbol: 'XYZ',
       },
     });
 

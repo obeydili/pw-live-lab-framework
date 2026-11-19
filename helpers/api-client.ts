@@ -17,7 +17,11 @@ export class ApiError extends Error {
 async function ensureOk(res: APIResponse, action: string): Promise<void> {
   if (res.ok()) return;
   const body: unknown = await res.json().catch(() => null);
-  throw new ApiError(`Failed to ${action}: ${res.status()} ${res.statusText()}`, res.status(), body);
+  throw new ApiError(
+    `Failed to ${action}: ${res.status()} ${res.statusText()}`,
+    res.status(),
+    body,
+  );
 }
 
 export class ApiClient {

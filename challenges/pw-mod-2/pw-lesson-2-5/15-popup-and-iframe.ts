@@ -42,7 +42,8 @@ async function main() {
     const iFrame = page.frameLocator('iframe[id="quote-frame"]');
     await expect(iFrame.getByText('Choose a symbol to see a quote.')).toBeVisible();
     await page.getByRole('combobox', { name: 'Symbol' }).selectOption('BLUE');
-    await expect.poll(async () => {
+    await expect
+      .poll(async () => {
         const lastText = await iFrame.getByTestId('last-price').textContent();
         const lastTextBlue = parseFloat(lastText ?? '');
         return lastTextBlue;
@@ -50,13 +51,16 @@ async function main() {
       .toBe(lastBlue);
 
     await iFrame.getByText('Use last price').click();
-    await expect(page.getByRole('spinbutton', {name: 'Limit price'})).toHaveValue(lastBlue.toFixed(2))
-    await page.getByRole('radio', {name: 'Buy'}).click();
-    await page.getByLabel('Quantity').fill('300')
+    await expect(page.getByRole('spinbutton', { name: 'Limit price' })).toHaveValue(
+      lastBlue.toFixed(2),
+    );
+    await page.getByRole('radio', { name: 'Buy' }).click();
+    await page.getByLabel('Quantity').fill('300');
     await expect(page.getByRole('button', { name: 'Submit order' })).toBeEnabled();
-    await expect(page.locator('iframe[id="quote-frame"]').contentFrame().getByRole('heading')).toHaveText('Market quote');
+    await expect(
+      page.locator('iframe[id="quote-frame"]').contentFrame().getByRole('heading'),
+    ).toHaveText('Market quote');
     //await expect(page).toHaveURL(/\?created=1/)
-    
 
     // TODO: API: /api/quotes/XYZ 404; read ACME and BLUE quotes
     // TODO: ORD-1001: start waiting for the new tab, click Open quote; URL, title, heading, last price; close it

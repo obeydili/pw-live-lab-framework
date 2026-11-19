@@ -39,7 +39,7 @@ async function main() {
     });
 
     const response = await responsePromise;
-    await expect(response.status()).toBe(200)
+    await expect(response.status()).toBe(200);
     const totalOrders = Number(response.headers()['x-total-count']);
     // Web-first wait instead of a fixed sleep: once the list shows the ACME result, typing and the
     // debounce are over, so any extra search request would already have been sent.

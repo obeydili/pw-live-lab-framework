@@ -3,7 +3,6 @@ import { env } from '../../../helpers/env';
 
 const BASE_URL = process.env.BASE_URL ?? 'http://localhost:3300';
 
-
 async function main() {
   const api = await request.newContext({ baseURL: BASE_URL });
   const api2 = await request.newContext({ baseURL: BASE_URL });
@@ -290,7 +289,6 @@ async function main() {
     const jsonPostLogin2 = await postLogin2.json();
     const token2 = jsonPostLogin2.token;
 
-    
     const postLogout = await api2.post('/api/auth/logout', {
       headers: {
         Authorization: `Bearer ${token2}`,

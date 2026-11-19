@@ -22,5 +22,4 @@ export class OrdersPage {
       has: this.page.getByText(text),
     });
   }
-
 }

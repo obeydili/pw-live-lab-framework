@@ -7,7 +7,7 @@ const statePath = (user: string) => path.join(os.tmpdir(), `pw-mod-2-${user}.jso
 
 test.beforeAll(async ({ playwright, baseURL }) => {
   // TODO: reset, then log in trader1 and approver1 over the API and save each session to statePath(user)
-  const api = await playwright.request.newContext({ baseURL: baseURL});
+  const api = await playwright.request.newContext({ baseURL: baseURL });
   try {
     const resetResponse = await api.post('/api/test/reset');
     expect(resetResponse.status()).toBe(200);

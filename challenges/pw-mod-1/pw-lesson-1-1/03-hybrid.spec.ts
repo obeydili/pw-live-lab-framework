@@ -43,9 +43,7 @@ test('API-created order shows up in the UI', async ({ page, request }) => {
   const row = page.getByRole('row').filter({ hasText: `${orderId}` });
   await expect(row).toContainText('Pending Approval');
   const responsePromise = page.waitForResponse(
-    (res) =>
-      res.url().includes(`/api/orders/${orderId}`) &&
-      res.request().method() === 'GET',
+    (res) => res.url().includes(`/api/orders/${orderId}`) && res.request().method() === 'GET',
   );
   await page.goto(`/orders/${orderId}`);
   const response3 = await responsePromise;

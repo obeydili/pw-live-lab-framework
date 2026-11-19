@@ -37,7 +37,8 @@ async function main() {
       executionStatus: 'Working',
     });
 
-    await expect.poll(
+    await expect
+      .poll(
         async () => {
           // Fetch the order details from your API
           const response4 = await api.get('/api/orders/ORD-1003', {

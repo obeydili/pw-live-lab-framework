@@ -59,11 +59,16 @@ async function main() {
     });
 
     await page.reload();
-    await expect(page.getByRole('row').filter({
-      has: page.getByText('ORD-9001')
-    }).filter({
-      has: page.getByText('Rejected')
-    })).toBeVisible();
+    await expect(
+      page
+        .getByRole('row')
+        .filter({
+          has: page.getByText('ORD-9001'),
+        })
+        .filter({
+          has: page.getByText('Rejected'),
+        }),
+    ).toBeVisible();
     await page.unrouteAll();
 
     // TODO: const ORDERS_API = '**/api/orders*'

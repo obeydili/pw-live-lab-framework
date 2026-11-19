@@ -22,9 +22,9 @@ async function main() {
     const response3: APIResponse = await apiContext.post('/api/auth/login', {
       data: { username: 'trader1', password: env.TRADER1_PASSWORD },
     });
-    
+
     const { token } = await readJson<LoginResponse>(response3);
-    
+
     const Data: CreateOrderRequest = {
       symbol: 'ACME',
       side: 'Buy',
@@ -32,7 +32,7 @@ async function main() {
       limitPrice: 12.5,
     };
 
-    const response4:APIResponse = await apiContext.post('/api/orders', {
+    const response4: APIResponse = await apiContext.post('/api/orders', {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -42,11 +42,10 @@ async function main() {
     expect(response4.status()).toBe(201);
     //const jsonResponse4: Order = await response4.json();
     //const orderId = jsonResponse4.id;
-    const { id: orderId, status: statusResponse4 } = await readJson<Order>(response4)
+    const { id: orderId, status: statusResponse4 } = await readJson<Order>(response4);
     expect(statusResponse4).toBe('Pending Approval');
-    
 
-    const response5:APIResponse = await apiContext.get(`/api/orders/${orderId}`, {
+    const response5: APIResponse = await apiContext.get(`/api/orders/${orderId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

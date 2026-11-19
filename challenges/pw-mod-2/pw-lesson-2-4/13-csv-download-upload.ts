@@ -53,7 +53,7 @@ async function main() {
     for (const row of rowsWithView) {
       await expect(row).toContainText('Approved');
     }
-    
+
     await expect(page.getByRole('link', { name: 'Export CSV' })).toHaveAttribute(
       'href',
       /status=Approved/,
