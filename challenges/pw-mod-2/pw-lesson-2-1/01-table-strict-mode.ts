@@ -1,4 +1,5 @@
 import { chromium, request, expect } from '@playwright/test';
+import { env } from '../../../helpers/env';
 
 const BASE_URL = process.env.BASE_URL ?? 'http://localhost:3300';
 
@@ -15,7 +16,7 @@ async function main() {
     const loginResponse = await api.post('/api/auth/login', {
       data: {
         username: 'trader1',
-        password: 'Password123!',
+        password: env.TRADER1_PASSWORD,
       },
     });
 
@@ -32,7 +33,7 @@ async function main() {
     const ordersBody = await getOrdersResponse.json();
     await page.goto('/login');
     await page.getByLabel('username').fill('trader1');
-    await page.getByLabel('password').fill('Password123!');
+    await page.getByLabel('password').fill(env.TRADER1_PASSWORD);
     await page.getByRole('button', { name: 'Sign in' }).click();
     await expect(page).toHaveURL(/.*\/orders/);
     const rows = page.getByRole('row').filter({

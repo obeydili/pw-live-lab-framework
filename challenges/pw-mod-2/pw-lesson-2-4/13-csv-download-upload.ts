@@ -1,5 +1,6 @@
 import { chromium, request, expect } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
+import { env } from '../../../helpers/env';
 
 const BASE_URL = process.env.BASE_URL ?? 'http://localhost:3300';
 
@@ -13,7 +14,7 @@ async function main() {
     const loginResponse = await context.request.post('/api/auth/login', {
       data: {
         username: 'trader1',
-        password: 'Password123!',
+        password: env.TRADER1_PASSWORD,
       },
     });
 
@@ -142,7 +143,7 @@ async function main() {
     const loginResponse2 = await api.post('/api/auth/login', {
       data: {
         username: 'approver1',
-        password: 'Password123!',
+        password: env.APPROVER1_PASSWORD,
       },
     });
     const { token: approverToken } = await loginResponse2.json();

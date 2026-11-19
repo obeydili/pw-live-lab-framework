@@ -2,6 +2,7 @@ import { request, expect } from '@playwright/test';
 import type { APIResponse } from '@playwright/test';
 import { readJson } from '../../../helpers/readJson';
 import type { LoginResponse, CreateOrderRequest, Order, ResetResponse } from '../../../types/order';
+import { env } from '../../../helpers/env';
 
 const BASE_URL = process.env.BASE_URL ?? 'http://localhost:3300';
 
@@ -19,7 +20,7 @@ async function main() {
     expect(response2.status()).toBe(401);
 
     const response3: APIResponse = await apiContext.post('/api/auth/login', {
-      data: { username: 'trader1', password: 'Password123!' },
+      data: { username: 'trader1', password: env.TRADER1_PASSWORD },
     });
     
     const { token } = await readJson<LoginResponse>(response3);

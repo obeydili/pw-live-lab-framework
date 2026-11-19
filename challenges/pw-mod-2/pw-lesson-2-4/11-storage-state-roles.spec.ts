@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import os from 'node:os';
 import path from 'node:path';
+import { env } from '../../../helpers/env';
 
 const statePath = (user: string) => path.join(os.tmpdir(), `pw-mod-2-${user}.json`);
 
@@ -13,7 +14,7 @@ test.beforeAll(async ({ playwright, baseURL }) => {
     const loginResponse = await api.post('/api/auth/login', {
       data: {
         username: 'trader1',
-        password: 'Password123!',
+        password: env.TRADER1_PASSWORD,
       },
     });
     expect(loginResponse.status()).toBe(200);
@@ -23,7 +24,7 @@ test.beforeAll(async ({ playwright, baseURL }) => {
     const loginResponse2 = await api.post('/api/auth/login', {
       data: {
         username: 'approver1',
-        password: 'Password123!',
+        password: env.APPROVER1_PASSWORD,
       },
     });
     expect(loginResponse2.status()).toBe(200);

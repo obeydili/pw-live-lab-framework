@@ -1,4 +1,5 @@
 import { chromium, request, expect } from '@playwright/test';
+import { env } from '../../../helpers/env';
 
 const BASE_URL = process.env.BASE_URL ?? 'http://localhost:3300';
 
@@ -11,7 +12,7 @@ async function main() {
     const trader1Login = await api.post('/api/auth/login', {
       data: {
         username: 'trader1',
-        password: 'Password123!',
+        password: env.TRADER1_PASSWORD,
       },
     });
 
@@ -22,7 +23,7 @@ async function main() {
     const trader2Login = await api.post('/api/auth/login', {
       data: {
         username: 'trader2',
-        password: 'Password123!',
+        password: env.TRADER2_PASSWORD,
       },
     });
 
@@ -32,7 +33,7 @@ async function main() {
     const approverLogin = await api.post('/api/auth/login', {
       data: {
         username: 'approver1',
-        password: 'Password123!',
+        password: env.APPROVER1_PASSWORD,
       },
     });
 
@@ -281,7 +282,7 @@ async function main() {
     const postLogin2 = await api.post('/api/auth/login', {
       data: {
         username: 'trader1',
-        password: 'Password123!',
+        password: env.TRADER1_PASSWORD,
       },
     });
 

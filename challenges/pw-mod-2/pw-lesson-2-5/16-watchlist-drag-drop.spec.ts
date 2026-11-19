@@ -1,11 +1,12 @@
 import { test, expect } from '@playwright/test';
+import { env } from '../../../helpers/env';
 
 test('watchlist by drag-and-drop and by button', async ({ page }) => {
   await page.request.post('/api/test/reset');
   const loginResponse = await page.request.post('/api/auth/login', {
     data: {
       username: 'trader1',
-      password: 'Password123!',
+      password: env.TRADER1_PASSWORD,
     },
   });
 

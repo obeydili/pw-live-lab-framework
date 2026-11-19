@@ -1,11 +1,12 @@
 import { test, expect } from '@playwright/test';
+import { env } from '../../../helpers/env';
 
 test('API-created order shows up in the UI', async ({ page, request }) => {
   // TODO: API setup, UI login, waitForResponse, assertions
   const response1 = await request.post('/api/auth/login', {
     data: {
       username: 'trader1',
-      password: 'Password123!',
+      password: env.TRADER1_PASSWORD,
     },
   });
 
@@ -37,7 +38,7 @@ test('API-created order shows up in the UI', async ({ page, request }) => {
 
   await page.goto('/login');
   await page.getByLabel('username').fill('trader1');
-  await page.getByLabel('password').fill('Password123!');
+  await page.getByLabel('password').fill(env.TRADER1_PASSWORD);
   await page.getByRole('button', { name: 'Sign in' }).click();
   const row = page.getByRole('row').filter({ hasText: `${orderId}` });
   await expect(row).toContainText('Pending Approval');

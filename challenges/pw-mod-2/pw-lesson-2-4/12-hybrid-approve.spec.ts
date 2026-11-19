@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { env } from '../../../helpers/env';
 
 test('API arranges, UI acts, API asserts', async ({ page, request }) => {
   // TODO: reset; trader2 Bearer login; create the order
@@ -10,7 +11,7 @@ test('API arranges, UI acts, API asserts', async ({ page, request }) => {
   const authResponse = await request.post('/api/auth/login', {
     data: {
       username: 'trader2',
-      password: 'Password123!',
+      password: env.TRADER2_PASSWORD,
     },
   });
 
@@ -33,7 +34,7 @@ test('API arranges, UI acts, API asserts', async ({ page, request }) => {
 
   await page.goto('/login');
   await page.getByLabel('username').fill('approver1');
-  await page.getByLabel('password').fill('Password123!');
+  await page.getByLabel('password').fill(env.APPROVER1_PASSWORD);
   await page
     .getByRole('button', {
       name: 'Sign in',

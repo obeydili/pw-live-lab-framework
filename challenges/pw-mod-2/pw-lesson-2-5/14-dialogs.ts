@@ -1,4 +1,5 @@
 import { chromium, request, expect } from '@playwright/test';
+import { env } from '../../../helpers/env';
 
 const BASE_URL = process.env.BASE_URL ?? 'http://localhost:3300';
 
@@ -11,7 +12,7 @@ async function main() {
     const traderPage = await traderCtx.newPage();
     await traderPage.goto('/login');
     await traderPage.getByLabel('username').fill('trader1');
-    await traderPage.getByLabel('password').fill('Password123!');
+    await traderPage.getByLabel('password').fill(env.TRADER1_PASSWORD);
     await traderPage.getByRole('button', { name: 'Sign in' }).click();
     await expect(traderPage).toHaveURL('/orders');
     const postOrder = await traderCtx.request.post('api/orders', {
@@ -47,7 +48,7 @@ async function main() {
     await approverCtx.request.post('/api/auth/login', {
       data: {
         username: 'approver1',
-        password: 'Password123!',
+        password: env.APPROVER1_PASSWORD,
       },
     });
 

@@ -1,4 +1,5 @@
 import { chromium, request, expect } from '@playwright/test';
+import { env } from '../../../helpers/env';
 
 const BASE_URL = process.env.BASE_URL ?? 'http://localhost:3300';
 
@@ -15,7 +16,7 @@ async function main() {
     await page.getByRole('button', { name: 'Sign in' }).click();
     await expect(page.locator('#login-error')).toBeVisible();
     await page.getByLabel('username').fill('trader1');
-    await page.getByLabel('password').fill('Password123!');
+    await page.getByLabel('password').fill(env.TRADER1_PASSWORD);
     await page.getByRole('button', { name: 'Sign in' }).click();
     await expect(page).toHaveURL(/.*\/orders/);
     await expect(page.getByText('Trader One (trader)')).toBeVisible();

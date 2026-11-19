@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { env } from '../../../helpers/env';
 
 test.beforeEach(async ({ page, request }) => {
   // TODO: reset, sign in trader1 through the UI, wait until signed in
@@ -6,7 +7,7 @@ test.beforeEach(async ({ page, request }) => {
   expect(resetResponse.ok()).toBeTruthy();
   await page.goto('/login');
   await page.getByLabel('username').fill('trader1');
-  await page.getByLabel('password').fill('Password123!');
+  await page.getByLabel('password').fill(env.TRADER1_PASSWORD);
   await page
     .getByRole('button', {
       name: 'Sign in',
