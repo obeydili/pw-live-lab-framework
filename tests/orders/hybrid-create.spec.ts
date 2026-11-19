@@ -1,20 +1,20 @@
+import { expect } from '@playwright/test';
 import { test } from '../../fixtures/index';
-import { expect, APIResponse } from '@playwright/test';
-import { readJson } from '../../helpers/readJson';
-import type { Order } from '../../types/order';
-import { OrdersPage } from '../../pages/orders.page';
+import { uniqueClientOrderId } from '../../helpers/test-data';
+
+// No apiClient.reset() here: reset restores the seed for the whole server, which would delete
+// orders that tests running in parallel are using. Each test creates its own order instead.
 
 test(
   'trader can create order via API and see it in UI',
   { tag: '@hybrid' },
   async ({ apiClient, traderPage, ordersPage }) => {
-    //await apiClient.reset();
     const order = await apiClient.createOrder({
       symbol: 'ACME',
       side: 'Buy',
       quantity: 300,
       limitPrice: 20,
-      clientOrderId: `${Date.now()}`,
+      clientOrderId: uniqueClientOrderId(),
     });
     await ordersPage.navigate('/orders');
     await expect(traderPage).toHaveURL('/orders');
@@ -25,17 +25,15 @@ test(
 test(
   'trader2 can create order via API and see it in UI',
   { tag: '@trader2' },
-  async ({ trader2ApiClient, trader2Page }) => {
-    //await apiClient.reset();
-    const orders = new OrdersPage(trader2Page);
+  async ({ trader2ApiClient, trader2OrdersPage }) => {
     const order = await trader2ApiClient.createOrder({
       symbol: 'ACME',
       side: 'Buy',
       quantity: 300,
       limitPrice: 20,
-      clientOrderId: `${Date.now()}`,
+      clientOrderId: uniqueClientOrderId(),
     });
-    await orders.navigate('/orders');
-    await expect(orders.filterRowsByText(order.id)).toContainText('Pending Approval');
+    await trader2OrdersPage.navigate('/orders');
+    await expect(trader2OrdersPage.filterRowsByText(order.id)).toContainText('Pending Approval');
   },
 );

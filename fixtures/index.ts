@@ -11,6 +11,7 @@ type MyFixtures = {
   traderPage: Page;
   loginPage: LoginPage;
   ordersPage: OrdersPage;
+  trader2OrdersPage: OrdersPage;
   trader2Page: Page;
   approverPage: Page;
 };
@@ -38,6 +39,9 @@ export const test = base.extend<MyFixtures>({
   ordersPage: async ({ page }, use) => {
     const ordersPage = new OrdersPage(page);
     await use(ordersPage);
+  },
+  trader2OrdersPage: async ({ trader2Page }, use) => {
+    await use(new OrdersPage(trader2Page));
   },
   traderPage: async ({ page }, use) => {
     await page.goto('/login');
