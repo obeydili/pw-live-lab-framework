@@ -1,4 +1,4 @@
-import { Page, test as base } from '@playwright/test';
+import { Page, expect, test as base } from '@playwright/test';
 import { ApiClient } from '../helpers/api-client';
 import { env } from '../helpers/env';
 import { LoginPage } from '../pages/login.page';
@@ -43,15 +43,17 @@ export const test = base.extend<MyFixtures>({
     await page.goto('/login');
     const loginPage = new LoginPage(page);
     await loginPage.login(env.TRADER1_USERNAME, env.TRADER1_PASSWORD);
+    await expect(page).toHaveURL(/\/orders/);
     await use(page);
   },
   trader2Page: async ({ browser }, use) => {
     const context = await browser.newContext();
     const page = await context.newPage();
-    await page.goto('/login');
-    const loginPage = new LoginPage(page);
-    await loginPage.login(env.TRADER2_USERNAME, env.TRADER2_PASSWORD);
     try {
+      await page.goto('/login');
+      const loginPage = new LoginPage(page);
+      await loginPage.login(env.TRADER2_USERNAME, env.TRADER2_PASSWORD);
+      await expect(page).toHaveURL(/\/orders/);
       await use(page);
     } finally {
       await context.close();
@@ -60,10 +62,11 @@ export const test = base.extend<MyFixtures>({
   approverPage: async ({ browser }, use) => {
     const context = await browser.newContext();
     const page = await context.newPage();
-    await page.goto('/login');
-    const loginPage = new LoginPage(page);
-    await loginPage.login(env.APPROVER1_USERNAME, env.APPROVER1_PASSWORD);
     try {
+      await page.goto('/login');
+      const loginPage = new LoginPage(page);
+      await loginPage.login(env.APPROVER1_USERNAME, env.APPROVER1_PASSWORD);
+      await expect(page).toHaveURL(/\/orders/);
       await use(page);
     } finally {
       await context.close();
