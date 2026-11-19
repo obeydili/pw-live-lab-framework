@@ -44,7 +44,7 @@ async function main() {
     await page.getByRole('combobox', { name: 'Symbol' }).selectOption('BLUE');
     await expect.poll(async () => {
         const lastText = await iFrame.getByTestId('last-price').textContent();
-        const lastTextBlue = parseFloat(lastText);
+        const lastTextBlue = parseFloat(lastText ?? '');
         return lastTextBlue;
       })
       .toBe(lastBlue);

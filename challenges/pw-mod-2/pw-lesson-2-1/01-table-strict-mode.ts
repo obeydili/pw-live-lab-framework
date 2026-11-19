@@ -1,5 +1,6 @@
 import { chromium, request, expect } from '@playwright/test';
 import { env } from '../../../helpers/env';
+import type { Order } from '../../../types/order';
 
 const BASE_URL = process.env.BASE_URL ?? 'http://localhost:3300';
 
@@ -30,7 +31,7 @@ async function main() {
     });
     await expect(getOrdersResponse.status()).toBe(200);
 
-    const ordersBody = await getOrdersResponse.json();
+    const ordersBody: Order[] = await getOrdersResponse.json();
     await page.goto('/login');
     await page.getByLabel('username').fill('trader1');
     await page.getByLabel('password').fill(env.TRADER1_PASSWORD);
@@ -44,14 +45,15 @@ async function main() {
     });
 
     await expect(rows).toHaveCount(10);
-    let caughtError: any;
+    let caughtError: unknown;
     try {
       await page.getByRole('row').click();
     } catch (e) {
       caughtError = e;
     }
     expect(caughtError).toBeDefined();
-    expect(caughtError.message).toContain('strict mode violation');
+    expect(caughtError).toBeInstanceOf(Error);
+    expect((caughtError as Error).message).toContain('strict mode violation');
 
 
     await expect(rows.first()).toContainText(ordersBody[0].id);

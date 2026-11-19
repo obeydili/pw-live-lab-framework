@@ -1,5 +1,6 @@
 import { chromium, request, expect } from '@playwright/test';
 import { env } from '../../../helpers/env';
+import type { Order } from '../../../types/order';
 
 const BASE_URL = process.env.BASE_URL ?? 'http://localhost:3300';
 
@@ -25,7 +26,7 @@ async function main() {
         status: 'Rejected',
       },
     });
-    const orders1 = await getOrders1.json();
+    const orders1: Order[] = await getOrders1.json();
     expect(orders1.every((order) => order.status === 'Rejected')).toBe(true);
 
     const getOrders2 = await api.get('api/orders', {
@@ -37,7 +38,7 @@ async function main() {
       },
     });
 
-    const orders2 = await getOrders2.json();
+    const orders2: Order[] = await getOrders2.json();
     expect(orders2.every((order) => order.symbol === 'ACME')).toBe(true);
 
     const getOrders3 = await api.get('api/orders', {
@@ -49,7 +50,7 @@ async function main() {
       },
     });
 
-    const orders3 = await getOrders3.json();
+    const orders3: Order[] = await getOrders3.json();
     expect(orders3.every((order) => order.side === 'Buy')).toBe(true);
 
     const getOrders4 = await api.get('api/orders', {
@@ -63,13 +64,13 @@ async function main() {
       },
     });
 
-    const orders4 = await getOrders4.json();
+    const orders4: Order[] = await getOrders4.json();
     expect(orders4.every((order) => order.symbol === 'ACME')).toBe(true);
     expect(orders4.every((order) => order.side === 'Buy')).toBe(true);
 
     for (let i = 1; i < orders4.length; i++) {
-      const currentPrice = parseFloat(orders4[i].limitPrice);
-      const previousPrice = parseFloat(orders4[i - 1].limitPrice);
+      const currentPrice = orders4[i].limitPrice;
+      const previousPrice = orders4[i - 1].limitPrice;
       expect(previousPrice).toBeGreaterThanOrEqual(currentPrice);
     }
 
@@ -82,7 +83,7 @@ async function main() {
       },
     });
 
-    const orders5 = await getOrders5.json();
+    const orders5: Order[] = await getOrders5.json();
     expect(orders5.every((order) => order.symbol === 'ACME')).toBe(true);
 
     const getOrders6 = await api.get('api/orders', {
@@ -94,7 +95,7 @@ async function main() {
       },
     });
 
-    const orders6 = await getOrders6.json();
+    const orders6: Order[] = await getOrders6.json();
     expect(orders6.every((order) => order.createdBy === 'trader2')).toBe(true);
 
     const getOrders7 = await api.get('api/orders', {
@@ -114,8 +115,9 @@ async function main() {
     expect(orders7.length).toBe(seedTotal - 20);
 
     let currentPageNumber = 1;
-    const array = [];
-    let orders8 = [{ start: 'start' }];
+    const array: Order[][] = [];
+    // Starts non-empty so the loop runs once; replaced by each page of results.
+    let orders8: unknown[] = [{ start: 'start' }];
 
     while (orders8.length > 0) {
       const getOrders8 = await api.get('api/orders', {
@@ -128,12 +130,13 @@ async function main() {
           sort: 'id',
         },
       });
-      orders8 = await getOrders8.json();
-      array.push(orders8);
+      const pageOfOrders: Order[] = await getOrders8.json();
+      orders8 = pageOfOrders;
+      array.push(pageOfOrders);
       currentPageNumber++;
     }
     
-    const ids = [];
+    const ids: string[] = [];
     for (let number = 0; number < array.length; number++) {
       for (let number2 = 0; number2 < array[number].length; number2++) {
         ids.push(array[number][number2].id);

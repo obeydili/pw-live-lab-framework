@@ -7,7 +7,19 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "noEmit": true,
-    "types": ["node"]
+    "types": [
+      "node"
+    ]
   },
-  "include": ["helpers/**/*.ts","tests/**/*.ts", "playwright.config.ts", "types/**/*.ts", "pages/**/*.ts", "fixtures/**/*.ts", "orders/**/*.ts", "scripts/**/*.ts", "data/**/*.ts"]
+  "include": [
+    "playwright.config.ts",
+    "helpers/**/*.ts",
+    "fixtures/**/*.ts",
+    "pages/**/*.ts",
+    "types/**/*.ts",
+    "tests/**/*.ts",
+    "challenges/**/*.ts",
+    "scripts/**/*.ts",
+    "data/**/*.ts"
+  ]
 }

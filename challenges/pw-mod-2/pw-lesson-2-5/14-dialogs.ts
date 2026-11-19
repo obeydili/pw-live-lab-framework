@@ -64,7 +64,7 @@ async function main() {
     await approverPage.getByRole('button', { name: 'Reject with reason…' }).click();
     await expect(approverPage.getByTestId('order-status')).toHaveText('Pending Approval');
 
-    const dialogMessages = [];
+    const dialogMessages: string[] = [];
     approverPage.on('dialog', async (dialog) => {
       dialogMessages.push(dialog.type(), dialog.message());
       if (dialog.type() === 'prompt') {
@@ -80,7 +80,7 @@ async function main() {
     approverPage.removeAllListeners('dialog');
       
 
-    let dialogMessage: string;
+    let dialogMessage: string | undefined;
     approverPage.once('dialog', async (dialog) => {
       dialogMessage = dialog.message();
       await dialog.accept('Price too high');
