@@ -15,6 +15,7 @@ test(
       limitPrice: 20,
     });
     await ordersPage.navigate();
+    await expect(traderPage).toHaveURL('/orders');
     await expect(ordersPage.rowById(order.id)).toContainText('Pending Approval');
   },
 );
