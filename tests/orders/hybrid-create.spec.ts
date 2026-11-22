@@ -8,7 +8,7 @@ import { uniqueOrder } from '../../data/orders';
 test(
   'trader can create order via API and see it in UI',
   { tag: '@hybrid' },
-  async ({ apiClient, ordersPage }) => {
+  async ({ traderPage, apiClient, ordersPage }) => {
     const order = await apiClient.createOrder({
       ...uniqueOrder(),
       quantity: 300,

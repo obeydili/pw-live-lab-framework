@@ -77,10 +77,9 @@ async function main() {
     }
     **/
 
-    const prices = orders4.map(order => order.limitPrice);
+    const prices = orders4.map((order) => order.limitPrice);
     expect(isSortedDescending(prices)).toBe(true);
-    
-    
+
     const getOrders5 = await api.get('api/orders', {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -152,7 +151,7 @@ async function main() {
     }
     **/
 
-    const ids = array.flat().map(order => order.id)
+    const ids = array.flat().map((order) => order.id);
 
     expect(ids.length).toBe(seedTotal);
     const setOfIds = new Set(ids);

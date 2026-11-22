@@ -135,7 +135,7 @@ async function main() {
 
     const giantCsv = toCsv([
       ['symbol', 'side', 'quantity', 'limitPrice'],
-      ...Array.from({ length: 100 }, () => ['ECHO', 'Buy', '1', '10']),
+      ...Array.from({ length: 101 }, () => ['ECHO', 'Buy', '1', '10']),
     ]);
 
 

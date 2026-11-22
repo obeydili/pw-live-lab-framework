@@ -1,7 +1,6 @@
 import { Page, Locator } from '@playwright/test';
 import type { Symbol } from '../types/order';
 
-
 export class TicketPage {
   public readonly symbolSelect: Locator;
   public readonly radioBuy: Locator;

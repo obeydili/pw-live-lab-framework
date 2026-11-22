@@ -17,7 +17,7 @@ export class DetailsPage {
   public readonly duplicateOrderButton: Locator;
 
   constructor(public readonly page: Page) {
-    this.symbolData = page.locator('dd[data-field="symbol"]'); 
+    this.symbolData = page.locator('dd[data-field="symbol"]');
     this.sideData = page.locator('dd[data-field="side"]');
     this.quantityData = page.locator('dd[data-field="quantity"]');
     this.limitPriceData = page.locator('dd[data-field="limitPrice"]');

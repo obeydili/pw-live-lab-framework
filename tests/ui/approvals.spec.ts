@@ -12,7 +12,7 @@ test(
   { tag: '@hybrid' },
   async ({ apiClient, approvalsPage }) => {
     const order = await apiClient.createOrder({
-      ...uniqueOrder(), 
+      ...uniqueOrder(),
       symbol: 'CRSP',
       side: 'Buy',
       quantity: 40,
