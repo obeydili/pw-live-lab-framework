@@ -1,6 +1,6 @@
 import { expect } from '@playwright/test';
 import { test } from '../../fixtures/index';
-import { uniqueClientOrderId } from '../../helpers/test-data';
+import { uniqueOrder } from '../../data/orders';
 
 // No apiClient.reset() here: reset restores the seed for the whole server, which would delete
 // orders that tests running in parallel are using. Each test creates its own order instead.
@@ -8,17 +8,14 @@ import { uniqueClientOrderId } from '../../helpers/test-data';
 test(
   'trader can create order via API and see it in UI',
   { tag: '@hybrid' },
-  async ({ apiClient, traderPage, ordersPage }) => {
+  async ({ apiClient, ordersPage }) => {
     const order = await apiClient.createOrder({
-      symbol: 'ACME',
-      side: 'Buy',
+      ...uniqueOrder(),
       quantity: 300,
       limitPrice: 20,
-      clientOrderId: uniqueClientOrderId(),
     });
-    await ordersPage.navigate('/orders');
-    await expect(traderPage).toHaveURL('/orders');
-    await expect(ordersPage.filterRowsByText(order.id)).toContainText('Pending Approval');
+    await ordersPage.navigate();
+    await expect(ordersPage.rowById(order.id)).toContainText('Pending Approval');
   },
 );
 
@@ -27,13 +24,11 @@ test(
   { tag: '@trader2' },
   async ({ trader2ApiClient, trader2OrdersPage }) => {
     const order = await trader2ApiClient.createOrder({
-      symbol: 'ACME',
-      side: 'Buy',
+      ...uniqueOrder(),
       quantity: 300,
       limitPrice: 20,
-      clientOrderId: uniqueClientOrderId(),
     });
-    await trader2OrdersPage.navigate('/orders');
-    await expect(trader2OrdersPage.filterRowsByText(order.id)).toContainText('Pending Approval');
+    await trader2OrdersPage.navigate();
+    await expect(trader2OrdersPage.rowById(order.id)).toContainText('Pending Approval');
   },
 );

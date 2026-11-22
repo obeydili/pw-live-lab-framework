@@ -1,15 +1,15 @@
 import { Page, Locator } from '@playwright/test';
 
 export class ApprovalsPage {
-  readonly heading: Locator;
-  readonly flash: Locator;
+  public readonly heading: Locator;
+  public readonly flash: Locator;
 
-  constructor(private readonly page: Page) {
+  constructor(public readonly page: Page) {
     this.heading = page.getByRole('heading', { name: 'Approvals' });
     this.flash = page.getByRole('status');
   }
 
-  async goto(): Promise<void> {
+  async navigate(): Promise<void> {
     await this.page.goto('/approvals');
   }
 

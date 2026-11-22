@@ -62,3 +62,9 @@ export interface TestConfig {
   latencyMs: number;
   fillDelayMs: number;
 }
+
+export interface CsvInputFile {
+  name: string;
+  buffer: string | Buffer;
+  mimeType?: string;
+}

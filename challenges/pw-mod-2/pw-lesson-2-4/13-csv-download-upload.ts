@@ -1,6 +1,7 @@
 import { chromium, request, expect } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
 import { env } from '../../../helpers/env';
+import { toCsv } from '../../../helpers/csv';
 
 const BASE_URL = process.env.BASE_URL ?? 'http://localhost:3300';
 
@@ -125,10 +126,18 @@ async function main() {
 
     expect(importResponse.status()).toBe(415);
 
-    let giantCsv = 'symbol,side,quantity,limitPrice\n';
+    //let giantCsv = 'symbol,side,quantity,limitPrice\n';
+    /**
     for (let i = 0; i < 101; i++) {
       giantCsv += 'ECHO,Buy,1,10\n';
     }
+  **/
+
+    const giantCsv = toCsv([
+      ['symbol', 'side', 'quantity', 'limitPrice'],
+      ...Array.from({ length: 100 }, () => ['ECHO', 'Buy', '1', '10']),
+    ]);
+
 
     const importResponse2 = await api.post('/api/orders/import', {
       headers: {

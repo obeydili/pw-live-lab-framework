@@ -1,6 +1,7 @@
 import { request, expect } from '@playwright/test';
 import { env } from '../../../helpers/env';
 import type { Order } from '../../../types/order';
+import { isSortedDescending } from '../../../helpers/orders-assert';
 
 const BASE_URL = process.env.BASE_URL ?? 'http://localhost:3300';
 
@@ -68,12 +69,18 @@ async function main() {
     expect(orders4.every((order) => order.symbol === 'ACME')).toBe(true);
     expect(orders4.every((order) => order.side === 'Buy')).toBe(true);
 
+    /**
     for (let i = 1; i < orders4.length; i++) {
       const currentPrice = orders4[i].limitPrice;
       const previousPrice = orders4[i - 1].limitPrice;
       expect(previousPrice).toBeGreaterThanOrEqual(currentPrice);
     }
+    **/
 
+    const prices = orders4.map(order => order.limitPrice);
+    expect(isSortedDescending(prices)).toBe(true);
+    
+    
     const getOrders5 = await api.get('api/orders', {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -136,12 +143,16 @@ async function main() {
       currentPageNumber++;
     }
 
+    /**
     const ids: string[] = [];
     for (let number = 0; number < array.length; number++) {
       for (let number2 = 0; number2 < array[number].length; number2++) {
         ids.push(array[number][number2].id);
       }
     }
+    **/
+
+    const ids = array.flat().map(order => order.id)
 
     expect(ids.length).toBe(seedTotal);
     const setOfIds = new Set(ids);

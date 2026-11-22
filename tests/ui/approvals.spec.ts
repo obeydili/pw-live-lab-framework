@@ -2,7 +2,7 @@ import { expect } from '@playwright/test';
 import { test } from '../../fixtures/index';
 import { authFile } from '../../helpers/auth';
 import { env } from '../../helpers/env';
-import { uniqueClientOrderId } from '../../helpers/test-data';
+import { uniqueOrder } from '../../data/orders';
 
 // Starts signed in as approver1 from the session saved by tests/auth.setup.ts.
 test.use({ storageState: authFile('approver1') });
@@ -12,14 +12,14 @@ test(
   { tag: '@hybrid' },
   async ({ apiClient, approvalsPage }) => {
     const order = await apiClient.createOrder({
+      ...uniqueOrder(), 
       symbol: 'CRSP',
       side: 'Buy',
       quantity: 40,
       limitPrice: 99.99,
-      clientOrderId: uniqueClientOrderId(),
     });
 
-    await approvalsPage.goto();
+    await approvalsPage.navigate();
     await approvalsPage.approve(order.id);
 
     await expect(approvalsPage.flash).toHaveText(`Order ${order.id} approved.`);

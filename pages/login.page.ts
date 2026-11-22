@@ -1,10 +1,10 @@
 import { Page, Locator } from '@playwright/test';
 
 export class LoginPage {
-  readonly usernameInput: Locator;
-  readonly passwordInput: Locator;
-  readonly signInButton: Locator;
-  readonly errorMessage: Locator;
+  public readonly usernameInput: Locator;
+  public readonly passwordInput: Locator;
+  public readonly signInButton: Locator;
+  public readonly errorMessage: Locator;
 
   constructor(public readonly page: Page) {
     this.usernameInput = page.getByLabel('username');
@@ -13,7 +13,7 @@ export class LoginPage {
     this.errorMessage = page.getByRole('alert');
   }
 
-  async goto(): Promise<void> {
+  async navigate(): Promise<void> {
     await this.page.goto('/login');
   }
 

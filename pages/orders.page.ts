@@ -1,25 +1,25 @@
 import { Page, Locator } from '@playwright/test';
 
 export class OrdersPage {
-  private progressBar: Locator;
-  private exportCSV: Locator;
-  private rows: Locator;
-  private cells: Locator;
+  public readonly progressBar: Locator;
+  public readonly exportCSV: Locator;
+  public readonly rows: Locator;
+  public readonly cells: Locator;
 
-  constructor(private readonly page: Page) {
+  constructor(public readonly page: Page) {
     this.progressBar = this.page.getByRole('progressbar', { name: 'Loading orders' });
     this.exportCSV = this.page.getByRole('link', { name: 'Export CSV' });
     this.rows = this.page.getByRole('row');
     this.cells = this.page.getByRole('cell');
   }
 
-  async navigate(url: string): Promise<void> {
-    await this.page.goto(url);
+  async navigate(): Promise<void> {
+    await this.page.goto('/orders');
   }
 
-  filterRowsByText(text: string): Locator {
+  rowById(id: string): Locator {
     return this.rows.filter({
-      has: this.page.getByText(text),
+      has: this.page.getByRole('cell', { name: id, exact: true }),
     });
   }
 }

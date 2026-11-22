@@ -1,6 +1,7 @@
 import { chromium, request, expect } from '@playwright/test';
 import { env } from '../../../helpers/env';
 import type { Order } from '../../../types/order';
+import { ensureError } from '../../../helpers/errors';
 
 const BASE_URL = process.env.BASE_URL ?? 'http://localhost:3300';
 
@@ -49,7 +50,7 @@ async function main() {
     try {
       await page.getByRole('row').click();
     } catch (e) {
-      caughtError = e;
+      caughtError = ensureError(e);
     }
     expect(caughtError).toBeDefined();
     expect(caughtError).toBeInstanceOf(Error);

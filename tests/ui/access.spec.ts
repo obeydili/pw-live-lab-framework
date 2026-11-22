@@ -12,7 +12,7 @@ test.describe('signed out', () => {
   });
 
   test('a wrong password shows an error and stays on login', async ({ page, loginPage }) => {
-    await loginPage.goto();
+    await loginPage.navigate();
     await loginPage.login(env.TRADER1_USERNAME, 'not-the-password');
 
     await expect(loginPage.errorMessage).toHaveText('Invalid username or password.');
