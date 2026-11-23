@@ -1,6 +1,5 @@
 import { expect } from '@playwright/test';
 import { test } from '../../fixtures/index';
-import { env } from '../../helpers/env';
 import { newOrder } from '../../data/orders';
 import { ApiClient } from '../../helpers/api-client';
 
