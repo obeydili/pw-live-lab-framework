@@ -43,3 +43,6 @@ Assertions are web-first (`toHaveText`, `toHaveURL`, `toHaveCount`) and retry un
 ## Configuration
 
 `helpers/env.ts` reads `.env` (or the shell, which is how CI passes secrets). Each value is checked when it is read, so the Playwright config loads without a complete `.env`, and a missing password fails with the variable's name and how to set it. `playwright.config.ts` starts Practice-App-v2 through `webServer` on the `BASE_URL` port and reuses an app that is already running when not on CI.
+
+## Data Isolation vs. Global Reset:
+> To support high parallelism and prevent race conditions in CI, we avoid calling POST /api/test/reset within individual test files. Instead, we ensure test isolation by generating unique data (e.g., uniqueClientOrderId) for every request. This allows multiple workers to interact with the same backend simultaneously without interfering with each other's state.

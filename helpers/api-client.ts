@@ -80,6 +80,21 @@ export class ApiClient {
     return await readJson<Order>(res);
   }
 
+  async getOrders(
+    params?: Record<string, string | number>,
+  ): Promise<{ items: Order[]; totalCount: number }> {
+    const res = await this.request.get('api/orders', {
+      headers: this.getHeaders(),
+      params,
+    });
+    await ensureOk(res, 'get orders');
+    const headers = res.headers();
+    return {
+      items: await res.json(),
+      totalCount: Number(headers['x-total-count'] ?? 0),
+    };
+  }
+
   async approveOrder(id: string): Promise<Order> {
     const res = await this.request.post(`/api/orders/${id}/approve`, {
       headers: this.getHeaders(),

@@ -1,4 +1,5 @@
-import { CreateOrderRequest } from '../types/order';
+import { uniqueClientOrderId } from '../helpers/test-data';
+import type { CreateOrderRequest } from '../types/order';
 
 export const validOrder = {
   symbol: 'ACME',
@@ -6,6 +7,15 @@ export const validOrder = {
   quantity: 100,
   limitPrice: 150.0,
 } as const satisfies CreateOrderRequest;
+
+export const newOrder = (overrides: Partial<CreateOrderRequest> = {}): CreateOrderRequest => ({
+  symbol: 'BLUE',
+  side: 'Sell',
+  quantity: 25,
+  limitPrice: 40.5,
+  clientOrderId: uniqueClientOrderId(),
+  ...overrides,
+});
 
 /** Returns a fresh order object with a guaranteed unique clientOrderId */
 export const uniqueOrder = () => ({

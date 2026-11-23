@@ -1,17 +1,7 @@
 import { expect } from '@playwright/test';
 import { test } from '../../fixtures/index';
 import { env } from '../../helpers/env';
-import { uniqueClientOrderId } from '../../helpers/test-data';
-import type { CreateOrderRequest } from '../../types/order';
-
-const newOrder = (overrides: Partial<CreateOrderRequest> = {}): CreateOrderRequest => ({
-  symbol: 'BLUE',
-  side: 'Sell',
-  quantity: 25,
-  limitPrice: 40.5,
-  clientOrderId: uniqueClientOrderId(),
-  ...overrides,
-});
+import { newOrder } from '../../data/orders';
 
 test.describe('Orders API', { tag: '@api' }, () => {
   test('GET /api/me returns the signed-in trader', async ({ apiClient }) => {
