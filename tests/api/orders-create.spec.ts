@@ -22,7 +22,7 @@ test.describe('create orders', { tag: '@api' }, () => {
     const order2 = newOrder();
     await apiClient.createOrder(order2);
     await expect(apiClient.createOrder(order2)).rejects.toMatchObject({
-      status: 409, 
+      status: 409,
       body: { error: expect.stringContaining('already exists') },
     });
   });
